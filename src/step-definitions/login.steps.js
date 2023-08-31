@@ -1,25 +1,17 @@
 const {Then} = require("@wdio/cucumber-framework");
 
-Then(/^I press log in$/, async function() {
-    await console.log("Step - I press log in");
-})
-
-Then(/^I enter login email$/, async function() {
-    await console.log("Step - I enter login email");
-})
-
-Then(/^I enter login password$/, async function() {
-    await console.log("Step - I enter login password");
-})
-
-Then(/^I confirm login$/, async function() {
-    await console.log("Step - I confirm login");
-})
-
-Then(/^I am logged in$/, async function() {
-    await console.log("Step - I am logged in");
-})
 
 Then(/^I have logged in$/, async function() {
-    await console.log("Step - I am logged in");
+    await this.basePage.buttonAccount.waitForDisplayed();
+    await this.basePage.buttonAccount.click();
+    await this.basePage.buttonLogin.waitForDisplayed();
+    await this.basePage.buttonLogin.click();
+    await this.loginPage.waitForLoad();
+    await this.loginPage.inputEmail.waitForDisplayed();
+    await this.loginPage.inputEmail.setValue('sola9_89@mailinator.com');
+    await this.loginPage.inputPassword.waitForDisplayed();
+    await this.loginPage.inputPassword.setValue('asddfff');
+    await this.loginPage.buttonLogin.waitForDisplayed();
+    await this.loginPage.buttonLogin.click();
+    await this.basePage.buttonBasket.waitForDisplayed();
 })

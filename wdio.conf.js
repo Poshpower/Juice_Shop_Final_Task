@@ -1,3 +1,4 @@
+
 export const config = {
     //
     // ====================
@@ -24,6 +25,10 @@ export const config = {
     specs: [
         // ToDo: define location for spec files here
         './src/features/**/*.feature'
+        //  './src/features/**/auth.feature'
+        // './src/features/**/order-and-payment.feature'
+
+
     ],
     // Patterns to exclude.
     exclude: [
@@ -52,10 +57,10 @@ export const config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-        browserName: 'chrome',
-        'goog:chromeOptions': {
-            args: ['--no-sandbox', '--headless']
-          }
+        browserName: 'chrome'
+        // 'goog:chromeOptions': {
+        //     args: ['--no-sandbox', '--headless']
+        //   }
     }],
 
     //
@@ -89,7 +94,7 @@ export const config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    baseUrl: 'http://159.65.199.191/#/',
+    baseUrl: 'http://159.65.199.191',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 15000,
@@ -105,7 +110,7 @@ export const config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    // services: ['chromedriver'],
+    services: ['chromedriver'],
     //
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -127,16 +132,22 @@ export const config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec'
-        // ,
-        // ['allure', {outputDir: 'allure-results'}]
+    reporters: ['spec',
+        ['allure',
+            {
+                outputDir: 'allure-results',
+                disableWebdriverStepsReporting: true,
+                disableWebdriverScreenshotsReporting: true,
+                useCucumberStepsReporter: true
+            }
+        ]
     ],
 
     //
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./src/step-definitions/**/*.js'],
+        require: ['./src/step-definitions/**/*.js', './src/support/**/*.js'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -235,8 +246,32 @@ export const config = {
      * @param {ITestCaseHookParameter} world    world object containing information on pickle and test step
      * @param {object}                 context  Cucumber World object
      */
-    // beforeScenario: function (world, context) {
-    // },
+    beforeScenario: function (world, context) {
+        const BasePage = require('./src/pages/common/base.page');
+        const LoginPage = require('./src/pages/auth/login.page');
+        const RegisterPage = require('./src/pages/auth/registration.page');
+        const ForgotPasswordPage = require("./src/pages/auth/forgot-password.page");
+        const PaymentOptionPage = require("./src/pages/orders-and-payment/my-payment-options.page");
+        const MySavedAddressPage = require("./src/pages/orders-and-payment/my-saved-addresses.pages");
+        const NewAddressPage = require("./src/pages/orders-and-payment/add-new-address.page");
+        const ProductsPage = require("./src/pages/product.page");
+        const BasketPage = require('./src/pages/basket.page');
+
+
+
+        context.basePage = new BasePage();
+        context.loginPage = new LoginPage();
+        context.registerPage = new RegisterPage();
+        context.forgotPasswordPage = new ForgotPasswordPage();
+        context.paymentPage = new PaymentOptionPage();
+        context.savedAddressesPage = new MySavedAddressPage();
+        context.addressPage = new NewAddressPage();
+        context.productsPage = new ProductsPage();
+        context.basketPage = new BasketPage();
+
+
+
+    },
     /**
      *
      * Runs before a Cucumber Step.

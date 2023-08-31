@@ -49,11 +49,11 @@ Scenario: Forgot password
 
         And I press forgot password
 
-        And I enter email in forgot email page
+        And I enter <email> in forgot email page
 
         And I click on security question field
 
-        And I see security question
+        And I see security <question>
 
         And I enter security question
 
